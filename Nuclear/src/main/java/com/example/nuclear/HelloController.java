@@ -10,12 +10,7 @@ import javafx.scene.layout.*;
 public class HelloController {
     @FXML
     private AnchorPane miAnchorPane;
-    @FXML
-    private AnchorPane innerAnchorPane;
-    @FXML
-    private Button play;
-    @FXML
-    private Label welcomeText;
+
 
     public void initialize() {
         // Establecer la imagen de fondo
@@ -25,10 +20,6 @@ public class HelloController {
         Background background = new Background(backgroundImage);
         miAnchorPane.setBackground(background);
 
-        // Set innerAnchorPane to fill its parent
-        AnchorPane.setTopAnchor(innerAnchorPane, 0.0);
-        AnchorPane.setBottomAnchor(innerAnchorPane, 0.0);
-        AnchorPane.setLeftAnchor(innerAnchorPane, 0.0);
-        AnchorPane.setRightAnchor(innerAnchorPane, 0.0);
+
     }
 }
