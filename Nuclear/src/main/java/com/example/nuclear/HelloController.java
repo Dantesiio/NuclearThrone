@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 
 public class HelloController {
     @FXML
-    private AnchorPane miAnchorPane;
+    private BorderPane miAnchorPane;
 
 
     public void initialize() {
