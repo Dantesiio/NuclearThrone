@@ -5,12 +5,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane fx:id="miAnchorPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nuclear.HelloController">
     <children>
-        <ImageView fitHeight="200" fitWidth="300">
+        <ImageView fx:id="playBT" fitHeight="200" fitWidth="300">
             <image>
                 <Image url="file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/Play.png"/>
             </image>
         </ImageView>
-        <ImageView fitHeight="200" fitWidth="300" layoutX="300">
+        <ImageView fx:id="quitBT" fitHeight="200" fitWidth="300" layoutX="300">
             <image>
                 <Image url="file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/Quit.png"/>
             </image>
