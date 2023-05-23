@@ -1,5 +1,6 @@
 package com.example.nuclear.model;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ public class Level {
 
     private int id;
     private Color color;
-
+    private Image img;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
 
@@ -16,6 +17,14 @@ public class Level {
         this.id = id;
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
     }
 
     public int getId() {

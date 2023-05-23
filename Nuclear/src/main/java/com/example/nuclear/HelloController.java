@@ -1,5 +1,6 @@
 package com.example.nuclear;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -8,6 +9,8 @@ import javafx.stage.Stage;
 public class HelloController {
     @FXML
     private BorderPane miAnchorPane;
+    @FXML
+    private Canvas canvas;
 
     @FXML
     private ImageView playBT;
@@ -15,10 +18,9 @@ public class HelloController {
     private ImageView quitBT;
 
 
-
-
     public void initialize() {
         // Establecer la imagen de fondo
+
         Image imagenDeFondo = new Image("file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/FondoGame.gif");
         BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
         BackgroundImage backgroundImage = new BackgroundImage(imagenDeFondo, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
