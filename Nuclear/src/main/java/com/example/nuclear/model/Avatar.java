@@ -1,11 +1,14 @@
 package com.example.nuclear.model;
 
+import com.example.nuclear.HelloApplication;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class Avatar extends Drawing {
+public class Avatar extends Drawing implements Runnable {
     private Image[] images;
     private int imageIndex;
+    private boolean isMoving;
+    private boolean isFacingRight = true;
 
     public Avatar() {
         pos.setX(100);
@@ -15,24 +18,25 @@ public class Avatar extends Drawing {
     }
 
     private void loadImages() {
-        // Carga las imágenes para cada estado del personaje
+        // Load the images for each character state
         String[] imagePaths = {
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W1.png",
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W2.png",
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W3.png",
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W4.png",
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W5.png",
-                "file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/W6.png"
+                "W1.png",
+                "W2.png",
+                "W3.png",
+                "W4.png",
+                "W5.png",
+                "W6.png"
         };
 
         images = new Image[imagePaths.length];
         for (int i = 0; i < imagePaths.length; i++) {
-            images[i] = new Image(imagePaths[i]);
+            String imagePath = "file:" + HelloApplication.class.getResource(imagePaths[i]).getPath();
+            images[i] = new Image(imagePath);
         }
     }
 
     private void changeImage() {
-        // Cambia el índice de imagen y vuelve a cargar la imagen correspondiente
+        // Change the image index and reload the corresponding image
         imageIndex++;
         if (imageIndex >= images.length) {
             imageIndex = 0;
@@ -41,21 +45,35 @@ public class Avatar extends Drawing {
 
     @Override
     public void draw(GraphicsContext gc) {
-        // Dibuja la imagen del personaje en la posición actual
-        Image currentImage = images[imageIndex];
-        gc.drawImage(currentImage, pos.getX() - 25, pos.getY() - 25, 50, 50);
+        // Draw the character image at the current position
+        gc.drawImage(images[imageIndex], isFacingRight ? pos.getX() - 25 : pos.getX() + 25,
+                pos.getY() - 25, isFacingRight ? 50 : -50, 50);
     }
 
     public void keyPressed(String keyCode) {
-        // Maneja el evento de tecla presionada
-        if (keyCode.equals("W")) {
-            changeImage();
-        }if (keyCode.equals("A")) {
-            changeImage();
-        }if (keyCode.equals("S")) {
-            changeImage();
-        }if (keyCode.equals("D")) {
+        // Handle the key pressed event
+        if (keyCode.equals("W") || keyCode.equals("A") || keyCode.equals("S") || keyCode.equals("D")) {
             changeImage();
         }
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            imageIndex = (imageIndex + 1) % 6;
+            try {
+                Thread.sleep(80);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        isFacingRight = facingRight;
     }
 }

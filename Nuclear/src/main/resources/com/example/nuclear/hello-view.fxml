@@ -7,12 +7,12 @@
     <children>
         <ImageView fx:id="playBT" fitHeight="200" fitWidth="300">
             <image>
-                <Image url="file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/Play.png"/>
+                <Image url="@Play.png"/>
             </image>
         </ImageView>
         <ImageView fx:id="quitBT" fitHeight="200" fitWidth="300" layoutX="300">
             <image>
-                <Image url="file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/Quit.png"/>
+                <Image url="@Quit.png"/>
             </image>
         </ImageView>
     </children>

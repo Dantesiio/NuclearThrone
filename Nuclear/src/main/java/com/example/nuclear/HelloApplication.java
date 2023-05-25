@@ -19,7 +19,8 @@ public class HelloApplication extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxml));
             Scene scene = new Scene(fxmlLoader.load());
-            Cursor cursorPersonalizado = Cursor.cursor("file:/C:/Users/David/OneDrive/Escritorio/NuclearThrone/Nuclear/src/texturas/Aim.png");
+            String uri = "file:"+HelloApplication.class.getResource("Aim.png").getPath();
+            Cursor cursorPersonalizado = Cursor.cursor(uri);
             scene.setCursor(cursorPersonalizado);
             Stage stage = new Stage();
             stage.setTitle("NuclearThrone.exe");

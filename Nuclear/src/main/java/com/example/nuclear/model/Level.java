@@ -12,11 +12,13 @@ public class Level {
     private Image img;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Paredes> paredes;
 
     public Level(int id){
         this.id = id;
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
+        paredes = new ArrayList<>();
     }
 
     public Image getImg() {
@@ -57,5 +59,13 @@ public class Level {
 
     public void setBullets(ArrayList<Bullet> bullets) {
         this.bullets = bullets;
+    }
+
+    public ArrayList<Paredes> getParedes() {
+        return paredes;
+    }
+
+    public void setParedes(ArrayList<Paredes> paredes) {
+        this.paredes = paredes;
     }
 }
