@@ -2,7 +2,9 @@ package com.example.nuclear;
 
 import com.example.nuclear.model.*;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,6 +13,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 
 public class GameSceneOne {
@@ -36,6 +40,12 @@ public class GameSceneOne {
     private Avatar avatar;
     private Paredes paredes;
 
+
+    private Scene scene;
+
+    public GameSceneOne() {
+        canvas = new Canvas();  // Inicialización del objeto canvas
+    }
     @FXML
     public void initialize() {
         gc = canvas.getGraphicsContext2D();
@@ -156,6 +166,7 @@ public class GameSceneOne {
                 Level level = levels.get(currentLevel);
 
                 Platform.runLater(() -> {
+
                     gc.drawImage(backgroundImage, 0, 0, canvas.getWidth(), canvas.getHeight());
                     gc.setFill(Color.BLACK);
                     gc.fillRect(canvas.getWidth(), 0, 10, 10);
@@ -230,21 +241,120 @@ public class GameSceneOne {
                 }
             }
         });
+        ae.setDaemon(true); // Establecer como daemon para que se detenga cuando se cierre la aplicación
         ae.start();
+    }
+
+    public void checkCollisions(){
+        return;
     }
 
     public boolean isOutside(double x, double y) {
         return x < -10 || y < -10 || x > canvas.getWidth() || y > canvas.getHeight();
     }
+    private double clampRange(double value,int min, double max){
+        if(value<min){
+            return min;
+        } else if (value>max){
+            return max;
+        }else {
+            return value;
+        }
+    }
+    public void camera(){
+        this.scene = canvas.getScene();
+        Rectangle camera = new Rectangle();
+
+        camera.widthProperty().bind(scene.widthProperty());
+        camera.heightProperty().bind(scene.heightProperty());
+        camera.xProperty().bind(Bindings.createDoubleBinding(
+                () -> clampRange(avatar.pos.getX() - scene.getWidth() / 2, 0, canvas.getWidth() - scene.getWidth()),
+                avatar.getxProperty(), scene.widthProperty()));
+        camera.yProperty().bind(Bindings.createDoubleBinding(
+                () -> clampRange(avatar.pos.getY() - scene.getHeight() / 2, 0, canvas.getHeight() - scene.getHeight()),
+                avatar.getyProperty(), scene.heightProperty()));
+    }
+
 
     public void drawParedes(int index) {
         String path = "file:" + HelloApplication.class.getResource("ParedFill.png").getPath();
         int height = 40;
         Level lvl = levels.get(index);
+        lvl.getParedes().add(new Paredes(canvas, path, 100, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 130, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 70, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 40, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 10, 20));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (10 + height)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (3 + height * 2)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-4 + height * 3)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-11 + height * 4)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-18 + height * 5)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-25 + height * 6)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-32 + height * 7)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-39 + height * 8)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-46 + height * 9)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-53 + height * 10)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-60 + height * 11)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-67 + height * 12)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-74 + height * 13)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-81 + height * 14)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-88 + height * 15)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-95 + height * 16)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-102 + height * 17)));
+        lvl.getParedes().add(new Paredes(canvas, path, 10, (-109 + height * 18)));
+
+
+
+
+
         lvl.getParedes().add(new Paredes(canvas, path, 300, 20));
         lvl.getParedes().add(new Paredes(canvas, path, 300, (10 + height)));
         lvl.getParedes().add(new Paredes(canvas, path, 300, (3 + height * 2)));
         lvl.getParedes().add(new Paredes(canvas, path, 300, (-4 + height * 3)));
         lvl.getParedes().add(new Paredes(canvas, path, 300, (-11 + height * 4)));
+
+
+        lvl.getParedes().add(new Paredes(canvas, path, 330, 20));
+
+
+        lvl.getParedes().add(new Paredes(canvas, path, 360, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 390, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 420, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 450, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 480, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 510, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 540, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 570, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 600, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 630, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 660, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 690, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 720, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 750, 20));
+
+        lvl.getParedes().add(new Paredes(canvas, path, 780, 20));
+
+
+
+
+
     }
 }

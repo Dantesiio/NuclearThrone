@@ -13,7 +13,7 @@ public class Bullet extends Drawing {
 
     @Override
     public void draw(GraphicsContext gc) {
-        gc.setFill(Color.BLUE);
+        gc.setFill(Color.DARKGRAY);
         gc.fillOval(pos.getX()-5, pos.getY()-5, 10,10);
 
         pos.setX( pos.getX() + dir.getX() );

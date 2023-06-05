@@ -1,53 +1,76 @@
 package com.example.nuclear.model;
 
+import com.example.nuclear.GameSceneOne;
 import com.example.nuclear.HelloApplication;
+import com.example.nuclear.model.Drawing;
+import com.example.nuclear.model.Vector;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 public class Avatar extends Drawing implements Runnable {
-    private Image[] images;
-    private int imageIndex;
+    private Image[] run;
+    private Image[] idle;
+    private int imageIndex = 0;
     private boolean isMoving;
     private boolean isFacingRight = true;
+    public Vector pos = new Vector(100, 100);
+    private DoubleProperty xProperty;
+    private DoubleProperty yProperty;
+    private Thread animationThread;
 
     public Avatar() {
-        pos.setX(100);
-        pos.setY(100);
-        imageIndex = 0;
-        loadImages();
-    }
-
-    private void loadImages() {
-        // Load the images for each character state
-        String[] imagePaths = {
-                "W1.png",
-                "W2.png",
-                "W3.png",
-                "W4.png",
-                "W5.png",
-                "W6.png"
-        };
-
-        images = new Image[imagePaths.length];
-        for (int i = 0; i < imagePaths.length; i++) {
-            String imagePath = "file:" + HelloApplication.class.getResource(imagePaths[i]).getPath();
-            images[i] = new Image(imagePath);
+        run = new Image[6];
+        for (int i = 1; i <= 6; i++) {
+            String uri = "file:" + GameSceneOne.class.getResource("W" + i + ".png").getPath();
+            run[i - 1] = new Image(uri);
         }
+        idle= new Image[4];
+        for (int i = 1; i <= 4; i++) {
+            String uri = "file:" + GameSceneOne.class.getResource("I" + i + ".png").getPath();
+            idle[i - 1] = new Image(uri);
+        }
+
+        // Initialize properties
+        xProperty = new SimpleDoubleProperty(pos.getX());
+        yProperty = new SimpleDoubleProperty(pos.getY());
+
+        // Start animation thread
+        animationThread = new Thread(this);
+        animationThread.setDaemon(true);
+        animationThread.start();
     }
 
     private void changeImage() {
-        // Change the image index and reload the corresponding image
+        // Cambiar el índice de la imagen y cargar la imagen correspondiente
         imageIndex++;
-        if (imageIndex >= images.length) {
+        if (imageIndex >= run.length) {
             imageIndex = 0;
+        } else {
+            if (imageIndex >= idle.length) {
+                imageIndex = 0;
+            }
         }
     }
 
     @Override
     public void draw(GraphicsContext gc) {
-        // Draw the character image at the current position
-        gc.drawImage(images[imageIndex], isFacingRight ? pos.getX() - 25 : pos.getX() + 25,
-                pos.getY() - 25, isFacingRight ? 50 : -50, 50);
+        // Dibujar la imagen del personaje en la posición actual
+        if (isMoving==false) {
+            gc.drawImage(idle[imageIndex],
+                    isFacingRight ? pos.getX() - 25 : pos.getX() + 25,
+                    pos.getY() - 25,
+                    isFacingRight ? 50 : -50,
+                    50);
+        } else {
+            gc.drawImage(run[imageIndex],
+                    isFacingRight ? pos.getX() - 25 : pos.getX() + 25,
+                    pos.getY() - 25,
+                    isFacingRight ? 50 : -50,
+                    50);
+        }
     }
 
     public void keyPressed(String keyCode) {
@@ -76,4 +99,14 @@ public class Avatar extends Drawing implements Runnable {
     public void setFacingRight(boolean facingRight) {
         isFacingRight = facingRight;
     }
+
+    public DoubleProperty getxProperty() {
+        return xProperty;
+    }
+
+    public DoubleProperty getyProperty() {
+        return yProperty;
+    }
 }
+
+
