@@ -21,7 +21,12 @@ public class Bullet extends Drawing {
 
     @Override
     public void draw(GraphicsContext gc) {
+
         double angle = Math.toDegrees(Math.atan2(dir.getY(), dir.getX()));
+
+        gc.setFill(Color.DARKGRAY);
+        gc.fillOval(pos.getX()-5, pos.getY()-5, 10,10);
+
 
         gc.save();  // Guardar el estado gráfico actual
         gc.translate(pos.getX(), pos.getY());  // Establecer el punto de referencia en el centro de la bala

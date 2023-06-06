@@ -13,15 +13,14 @@ public class Avatar extends Drawing implements Runnable {
     private int lives;
 
 
-
-    private  Weapon weapon;
+    private Weapon weapon;
 
     public Avatar() {
         pos.setX(100);
         pos.setY(100);
         imageIndex = 0;
         loadImages();
-        lives=3;
+        lives = 3;
 
     }
 
@@ -84,9 +83,6 @@ public class Avatar extends Drawing implements Runnable {
     }
 
 
-
-
-
     private void changeImage() {
         // Change the image index and reload the corresponding image
         imageIndex++;
@@ -127,5 +123,6 @@ public class Avatar extends Drawing implements Runnable {
 
     public void setFacingRight(boolean facingRight) {
         isFacingRight = facingRight;
+
     }
 }
