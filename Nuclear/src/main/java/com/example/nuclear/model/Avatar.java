@@ -10,12 +10,43 @@ public class Avatar extends Drawing implements Runnable {
     private boolean isMoving;
     private boolean isFacingRight = true;
 
+    private int lives;
+
+
+
+    private  Weapon weapon;
+
     public Avatar() {
         pos.setX(100);
         pos.setY(100);
         imageIndex = 0;
         loadImages();
+        lives=3;
+
     }
+
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
+    public void equipWeapon(Weapon weapon) {
+        this.weapon = weapon;
+        loadImagesWithGun();
+    }
+
 
     private void loadImages() {
         // Load the images for each character state
@@ -34,6 +65,27 @@ public class Avatar extends Drawing implements Runnable {
             images[i] = new Image(imagePath);
         }
     }
+
+    private void loadImagesWithGun() {
+        String[] imagePaths = {
+                "W1final.png",
+                "W2final.png",
+                "W3final.png",
+                "W4final.png",
+                "W5final.png",
+                "W6final.png"
+        };
+
+        images = new Image[imagePaths.length];
+        for (int i = 0; i < imagePaths.length; i++) {
+            String imagePath = "file:" + HelloApplication.class.getResource(imagePaths[i]).getPath();
+            images[i] = new Image(imagePath);
+        }
+    }
+
+
+
+
 
     private void changeImage() {
         // Change the image index and reload the corresponding image

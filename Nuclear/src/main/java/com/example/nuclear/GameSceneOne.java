@@ -25,6 +25,8 @@ public class GameSceneOne {
     private ArrayList<Level> levels;
     private int currentLevel = 0;
 
+    private int shotsFired = 0;
+
     Image backgroundImage;
 
     private boolean isAlive = true;
@@ -35,9 +37,18 @@ public class GameSceneOne {
 
     private Avatar avatar;
     private Paredes paredes;
+    private ArrayList<Weapon> weapons;
+
+    private ArrayList<Grenade> grenades;
+
+    private LifeBar lifeBar;
+
+    private BulletBar bulletBar;
 
     @FXML
     public void initialize() {
+
+
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         String uri = "file:" + HelloApplication.class.getResource("FLoorL1.png").getPath();
@@ -49,6 +60,40 @@ public class GameSceneOne {
         canvas.setOnMouseMoved(this::onMouseMoved);
         avatar = new Avatar();
         levels = new ArrayList<>();
+        weapons = new ArrayList<>();
+        grenades = new ArrayList<>();
+
+        //Barras o indicadores
+
+        //De vida
+        Image[] lifeImages = {
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\2golpes.png"),   // Imagen para ultimo golpe
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\1golpe.png"),   // Imagen para un  golpes
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\fullVida.png")  // Imagen full de vida
+
+        };
+
+         lifeBar = new LifeBar(lifeImages,10,10);
+
+
+         //De balas
+        Image[] bulletBarImages = {
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicadorDebala0.png"),   // Imagen para no tener balas
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicadordebala1.png"),   // 1 bala
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicador2debala.png"),  // 2 balas
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicadordebala3.png"),  // 3 balas
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicadorDebala4.png"),  // 4 balas
+                new Image("c:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\indicadorDebala5.png")  // full balas
+        };
+
+        bulletBar = new BulletBar(bulletBarImages,10,45);
+
+
+
+
+
+
+
         // Generate the first map
         Level l1 = new Level(0);
         Enemy e = new Enemy(new Vector(400, 100));
@@ -56,7 +101,28 @@ public class GameSceneOne {
         l1.getEnemies().add(e);
         l1.getEnemies().add(new Enemy(new Vector(400, 300)));
         levels.add(l1);
+
+
+        //armas
+        // Crear y configurar las armas
+
+        for (int i = 0; i <= 1; i++) {
+
+             levels.get(0).generarArmaAleatoriaEnSuelo("Ak",canvas.getWidth()-25,canvas.getHeight()-25);
+
+        }
+
+        weapons.addAll(l1.getArmasEnSuelo());
+
+        for (int i = 0; i <= 1; i++) {
+            levels.get(0).generarGranadasEnElSuelo("Grenade", canvas.getWidth() - 25, canvas.getWidth() - 25);
+
+
+        }
+        grenades.addAll(l1.getGranadasEnSuelo());
+
         // Generate the second map
+
         Level l2 = new Level(1);
         l2.setColor(Color.GRAY);
         l2.getEnemies().add(new Enemy(new Vector(100, 100)));
@@ -135,19 +201,43 @@ public class GameSceneOne {
     private void onMousePressed(MouseEvent e) {
         System.out.println("X: " + e.getX() + " Y: " + e.getY());
 
-        double diffX = e.getX() - avatar.pos.getX();
-        double diffY = e.getY() - avatar.pos.getY();
-        Vector diff = new Vector(diffX, diffY);
-        diff.normalize();
-        diff.setMag(4);
+        if (avatar.getWeapon() != null) {
+            if (shotsFired >= 5) {
 
-        levels.get(currentLevel).getBullets().add(
-                new Bullet(
-                        new Vector(avatar.pos.getX(), avatar.pos.getY()),
-                        diff
-                )
-        );
+                //llamo al hilo
+                avatar.getWeapon().reload();
+
+                shotsFired = 0;
+                bulletBar.restart();
+
+            } else {
+
+                double diffX = e.getX() - avatar.pos.getX();
+                double diffY = e.getY() - avatar.pos.getY();
+                Vector diff = new Vector(diffX, diffY);
+                diff.normalize();
+                diff.setMag(4);
+
+                Bullet bullet = new Bullet(new Vector(avatar.pos.getX(), avatar.pos.getY()), diff);
+                Image image = new Image("C:\\Users\\Admin\\Desktop\\Tercer semestre\\Integradora3\\NuclearThrone\\Nuclear\\src\\main\\resources\\com\\example\\nuclear\\bulletLaser.png");
+                bullet.setImage(image);
+
+                levels.get(currentLevel).getBullets().add(bullet);
+                shotsFired++;
+                System.out.println("shots fired "+shotsFired);
+                avatar.getWeapon().shoot();
+
+                //disminuir del indicador
+                bulletBar.decreaseBullet();
+
+
+
+            }
+        } else {
+            System.out.println("No weapon");
+        }
     }
+
 
     public void draw() {
         Thread ae = new Thread(() -> {
@@ -173,6 +263,27 @@ public class GameSceneOne {
                     for (int i = 0; i < level.getParedes().size(); i++) {
                         level.getParedes().get(i).draw(gc);
                     }
+
+                    //armas
+                    // Dibujar las armas
+                    for (int i = 0; i < level.getArmasEnSuelo().size(); i++) {
+                        level.getArmasEnSuelo().get(i).draw(gc);
+
+                    }
+
+                    for (int i = 0; i < level.getGranadasEnSuelo().size(); i++) {
+                        level.getGranadasEnSuelo().get(i).draw(gc);
+
+                    }
+
+                    ///dibuja los indicadores
+                    lifeBar.draw(gc);
+
+                    if(avatar.getWeapon()!=null) {
+                        bulletBar.draw(gc);
+                    }
+
+
                 });
 
                 // Geometric calculations
@@ -193,6 +304,34 @@ public class GameSceneOne {
                 }
 
                 // Collisions
+
+
+
+                /// Dentro del bucle de dibujo en el método draw()
+                for (int i = 0; i < level.getArmasEnSuelo().size(); i++) {
+                    Weapon arma = level.getArmasEnSuelo().get(i);
+
+                    double distance = Math.sqrt(
+                            Math.pow(avatar.pos.getX() - arma.getPosX(), 2) +
+                                    Math.pow(avatar.pos.getY() - arma.getPosY(), 2)
+                    );
+
+                    if (distance < 30) {
+                        // El jugador está cerca del arma, puede recojerla
+                        avatar.equipWeapon(arma); // Agrega el arma a la lista de armas del jugador
+                        level.getArmasEnSuelo().remove(i); // Remueve el arma del suelo
+                        break; // Sale del bucle, asumiendo que solo se puede recojer una arma a la vez
+                    }
+
+
+
+                }
+
+
+
+
+
+
                 for (int i = 0; i < level.getBullets().size(); i++) {
                     Bullet bn = level.getBullets().get(i);
                     for (int j = 0; j < level.getEnemies().size(); j++) {
@@ -247,4 +386,8 @@ public class GameSceneOne {
         lvl.getParedes().add(new Paredes(canvas, path, 300, (-4 + height * 3)));
         lvl.getParedes().add(new Paredes(canvas, path, 300, (-11 + height * 4)));
     }
+
+
+
+
 }
