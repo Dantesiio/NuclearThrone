@@ -6,12 +6,12 @@
 <AnchorPane fx:id="fondoNivel" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.nuclear.GameSceneOne"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="600.0" prefWidth="800.0">
     <children>
-        <Canvas fx:id="canvas" height="600.0" width="800.0"
+        <Canvas fx:id="canvas" height="1080.0" width="1920.0"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <ImageView fx:id="fondoIMGVIEW" fitHeight="600.0" fitWidth="800.0"
+        <ImageView fx:id="fondoIMGVIEW" fitHeight="1080.0" fitWidth="1920.0"
                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     </children>
